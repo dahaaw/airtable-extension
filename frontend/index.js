@@ -15,7 +15,7 @@ globalConfig.setAsync( 'isLoading', false );
 
 const Logs = () => {
     const [ logs, setLogs ] = useSynced( 'logs' );
-    if( !logs || !logs.length ) setLogs( [] );
+    
     return(
         <div style={{ marginTop: '10px' }}>
             {logs.map( ( v, i ) => {
