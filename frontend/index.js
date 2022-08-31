@@ -15,10 +15,10 @@ globalConfig.setAsync( 'isLoading', false );
 
 const Logs = () => {
     const [ logs, setLogs ] = useSynced( 'logs' );
-    
+    if( !logs ) globalConfig.setAsync( 'logs', [] );
     return(
         <div style={{ marginTop: '10px' }}>
-            {logs.map( ( v, i ) => {
+            { logs && logs.map( ( v, i ) => {
                 return(<div key={ i } >{ v }</div>)
             })}
         </div>
