@@ -80,7 +80,15 @@ const projectStructure = () => {
                 color: 'pinkLight2'
             },
             {
+                name :'upcoming',
+                color: 'pinkLight1'
+            },
+            {
                 name :'completed',
+                color: 'greenLight2'
+            },
+            {
+                name :'deleted',
                 color: 'greenLight2'
             },
         ] } },

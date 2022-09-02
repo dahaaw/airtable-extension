@@ -34,6 +34,10 @@ const allTasksStructure = () => {
                 name :'reopened',
                 color: 'pinkLight2'
             },
+            {
+                name :'deleted',
+                color: 'pinkLight1'
+            },
         ] } },
         { name: 'task name', type: FieldType.MULTILINE_TEXT },
         { name: 'task description', type: FieldType.MULTILINE_TEXT },

@@ -25,7 +25,7 @@ export default ( projects ) => {
                 'total project budget': null,
                 '% project budget used': null,
                 'status': { name: project.subStatus },
-                'completed date': null,
+                'completed date': project.completedOn,
                 'completed on time': null,
                 'Budget Status': null
             }
