@@ -1,8 +1,15 @@
 import { base } from "@airtable/blocks";
 import { FieldType } from "@airtable/blocks/models";
+import services from "../../../services";
 import format from "../format";
 
-const timeStructure = () => {
+const timeStructure = async () => {
+    const dataCategories = await services.fetch.project.categories();
+    let categories = []
+    for( const ctg of dataCategories.categories ){
+        categories.push( { name: ctg.name } )
+    }
+
     const Project = base.getTableByNameIfExists( 'Projects' );
     const Companies = base.getTableByNameIfExists( 'Companies' );
     const People = base.getTableByNameIfExists( 'People' );
@@ -21,31 +28,7 @@ const timeStructure = () => {
             linkedTableId: People.id,
         } },
         { name: 'Description', type: FieldType.MULTILINE_TEXT },
-        { name: 'Project Category', type: FieldType.SINGLE_SELECT, options: { choices: [ 
-            {
-                name :''
-            },
-            {
-                name :'Internal',
-                color: 'blueLight2'
-            },
-            {
-                name :'Fixed Fee',
-                color: 'blueLight1'
-            },
-            {
-                name :'Time & Materials',
-                color: 'cyanLight1'
-            },
-            {
-                name :'Support Subscription',
-                color: 'greenBright'
-            },
-            {
-                name :'Non-Billable Warranty Support',
-                color: 'purpleBright'
-            },
-        ] } },
+        { name: 'Project Category', type: FieldType.SINGLE_SELECT, options: { choices: categories } },
         { name: 'Company', type: FieldType.MULTIPLE_RECORD_LINKS, options: {
             linkedTableId: Companies.id,
         } },
