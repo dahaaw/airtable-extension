@@ -7,6 +7,7 @@ import formatDataTimes from "./formatDataTimes";
 import formatDataMilestones from "./formatDataMilestones";
 import formatDataPeople from "./formatDataPeople";
 import formatDataCompanies from "./formatDataCompanies";
+import formatDataTaskLists from './formatDataTaskLists';
 
 export default {
     full,
@@ -18,4 +19,5 @@ export default {
     formatDataMilestones,
     formatDataPeople,
     formatDataCompanies,
+    formatDataTaskLists,
 }

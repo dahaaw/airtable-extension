@@ -7,11 +7,7 @@ export default ( companies ) => {
         data.push({
             fields: { 
                 'Company Name': cmp.name,
-                'Projects': null,
-                'People': null,
-                'Milestones': null,
-                'Time': null,
-                'All Tasks': null,
+                'ID': Number( cmp.id ),
             }
         })
     }

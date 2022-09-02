@@ -5,7 +5,7 @@ import config from "../../../config";
 export default async ( id, key, value ) => {
     const response = await fetch(`${ globalConfig.get( 'teamworkUrl' ) }/projects/${ id }.json`, {
         method: 'put',
-        headers: config.fetch.teamworkHeaders,
+        headers: config.fetch.teamworkHeaders(),
         body: JSON.stringify( { project: { [key]: value } } )
     });
     services.logs.forDisplay( `Project ${ key } updated.` );

@@ -4,6 +4,8 @@ export default ( people ) => {
     const data = [];
 
     for (const p of people) {
+        let companyId = services.airtable.record.getIDs( 'Companies', 'Company Name', p[ 'company-name' ] );
+        
         data.push({
             fields: { 
                 'Name': p[ 'full-name' ],
@@ -15,7 +17,7 @@ export default ( people ) => {
                 'Login Name': p[ 'user-name' ],
                 'Title': p.title,
                 'Company Id': Number( p.companyId ),
-                'Company Name': p[ 'company-name' ],
+                'Company Name': companyId,
                 'Email': p[ 'email-address' ],
                 'Visit Count': Number( p[ 'login-count' ] ),
                 'Last Login': p[ 'last-login' ],

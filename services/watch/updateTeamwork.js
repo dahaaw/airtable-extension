@@ -1,4 +1,5 @@
 import services from "..";
+import getIDsFromRelated from "../airtable/record/getIDsFromRelated";
 
 export default async ( table, column, key, value, id ) => {
     console.log( { table, column, key, value, id } );
@@ -19,6 +20,10 @@ export default async ( table, column, key, value, id ) => {
         if( column === 'start date' ) await services.fetch.task.update( id, 'start-date', valueDate( value ) );
         if( column === 'due date' ) await services.fetch.task.update( id, 'due-date', valueDate( value ) );
         if( column === 'time estimate' ) await services.fetch.task.update( id, 'estimated-minutes', value );
+        if( column === 'assigned to' ) {
+            const IDs = await getIDsFromRelated( 'People', 'ID', value );
+            await services.fetch.task.update( id, 'responsible-party-id', IDs )
+        }
     }
 
     if( table === 'Time' ){

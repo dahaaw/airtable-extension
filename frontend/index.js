@@ -4,20 +4,24 @@ import {
     initializeBlock,
     useBase,
     useSynced,
+    Dialog,
+    Heading,
+    FormField,
+    Input
 } from '@airtable/blocks/ui';
-import React from 'react';
+import React, { useState } from 'react';
 import services from '../services';
 
-// globalConfig.setAsync( 'teamworkUrl', 'https://stoplight.io/mocks/teamwork-dot-com/teamwork/42258908' );
-globalConfig.setAsync( 'teamworkUrl', 'https://hamdanscompany.teamwork.com' );
 globalConfig.setAsync( 'batchSize', 50 );
 globalConfig.setAsync( 'isLoading', false );
+globalConfig.setAsync( 'connected', false );
+services.fetch.testConnection();
 
 const Logs = () => {
     const [ logs, setLogs ] = useSynced( 'logs' );
     if( !logs ) globalConfig.setAsync( 'logs', [] );
     return(
-        <div style={{ marginTop: '10px' }}>
+        <div style={ {  marginTop: '10px' }}>
             { logs && logs.map( ( v, i ) => {
                 return(<div key={ i } >{ v }</div>)
             })}
@@ -25,32 +29,112 @@ const Logs = () => {
     )
 }
 
+const Settings = ( { isSettingsOpen, setIsSettingsOpen } ) => {
+    const [ teamworkUrl, setTeamworkUrl ] = useSynced( 'teamworkUrl' );
+    const [ username, setUsername ] = useSynced( 'username' );
+    const [ password, setPassword ] = useSynced( 'password' );
+    const [ batchSize, setBatchSize ] = useSynced( 'batchSize' );
+    const [ connected, setConnected ] = useSynced( 'connected' );
+
+    return (
+        <>
+            {isSettingsOpen && (
+            <Dialog onClose={() => setIsSettingsOpen(false)} width="320px">
+                <Dialog.CloseButton />
+                <div style={ { position: 'absolute', right: '12%' } }>
+                    <small style={ { padding: '5px 8px', borderRadius: '8px', background: connected ? 'green' : 'red', color: 'white' } }>
+                        { !connected && 'not' } connected
+                    </small>
+                </div>
+                <Heading>Settings</Heading>
+                <div style={ {  marginTop: '15px' }}>
+                    <FormField label="Teamwork url">
+                        <Input 
+                            value={ teamworkUrl } 
+                            onChange={ e => setTeamworkUrl(e.target.value) } 
+                            type='url'
+                        />
+                    </FormField>
+                    <FormField label="Username">
+                        <Input 
+                            value={ username } 
+                            onChange={ e => setUsername(e.target.value) } 
+                            type='text'
+                        />
+                    </FormField>
+                    <FormField label="Password">
+                        <Input 
+                            value={ password } 
+                            onChange={ e => setPassword(e.target.value) } 
+                            type='password'
+                        />
+                    </FormField>
+                    <FormField label="Write date persecond">
+                        <Input 
+                            value={ batchSize } 
+                            onChange={ e => setBatchSize(e.target.value) } 
+                            type='text'
+                        />
+                    </FormField>
+                </div>
+                <div style={ {textAlign: 'right' } }>
+                    <Button 
+                        onClick={() => setIsSettingsOpen(false)}
+                        size='small'
+                        variant='danger'
+                    >Close</Button>
+                    <Button 
+                        onClick={ () => services.fetch.testConnection() }
+                        size='small'
+                        variant='primary'
+                        style={ { marginLeft: '5px' } }
+                    >Connect</Button>
+                </div>
+            </Dialog>
+            )}
+        </>
+    )
+}
+
 function TeamworkSync() {
     const [ isLoading ] = useSynced( 'isLoading' );
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const [ connected ] = useSynced( 'connected' );
 
     const base = useBase();
     services.watch.all( base );
     
     return (
         <>
-            <div style={{padding: '10px'}}>
-                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+            <div style={ { padding: '10px' } }>
+                <div style={ { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } }>
                     <div>{ base.name } 🚀</div>
 
-                    <Button 
-                        variant= 'primary'
-                        size='small'
-                        icon={ isLoading ? "history" : "play" }
-                        onClick={ () => services.sync.full() }
-                        disabled={ isLoading }
-                    >
-                        { isLoading ? 'syncing...' : 'Full Sync' }
-                    </Button>
+                    <div>
+                        <Button 
+                            variant= 'primary'
+                            size='small'
+                            icon={ isLoading ? "history" : "play" }
+                            onClick={ () => services.sync.full() }
+                            disabled={ isLoading | !connected }
+                        >
+                            { isLoading ? 'syncing...' : 'Full Sync' }
+                        </Button>
+
+                        <Button 
+                            onClick={ () => setIsSettingsOpen( true ) }
+                            icon="settings" 
+                            variant='default' 
+                            size='small' 
+                            style={ { marginLeft: '5px' } }
+                        />
+                    </div>
                 </div>
 
-                <hr style={{marginTop: '10px'}}/>
+                <hr style={ { marginTop: '10px' } }/>
 
                 <Logs />
+                <Settings isSettingsOpen={ isSettingsOpen } setIsSettingsOpen={ setIsSettingsOpen } />
             </div>
         </>
     );

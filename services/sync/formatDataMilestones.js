@@ -3,15 +3,20 @@ import services from "..";
 export default ( milestones ) => {
     const data = [];
 
+    console.log({milestones})
     for (const ml of milestones) {
+        const companyId = services.airtable.record.getIDs( 'Companies', 'ID', ml[ 'company-id' ] );
+        const projectId = services.airtable.record.getIDs( 'Projects', 'ID', ml[ 'project-id' ] );
+        const assignedId = services.airtable.record.getIDs( 'People', 'ID', ml[ 'responsiblePartyIds' ]?.split( ',' ) );
+
         data.push({
             fields: { 
                 'Milestone': ml.title,
-                'Company Name': ml[ 'company-name' ],
-                'Project': ml[ 'project-name' ],
+                'Company Name': companyId,
+                'Project': projectId,
                 'Description': ml.description,
                 'Status': { name: ml.status },
-                'Assigned To': ml.responsiblePartyFullNames,
+                'Assigned To': assignedId,
                 'Private': ml.private ? 1 : 0,
                 'Due Date': services.formatter.date.YYYYMMDDto( ml.deadline ),
                 'Overdue By (days)': null,
@@ -20,20 +25,10 @@ export default ( milestones ) => {
                 'Active Tasks': ml.tasklists.length,
                 'Completed Tasks': null,
                 'Percent Complete': Number( ml.percentageComplete ),
-                'All Tasks': allTasks( ml.tasklists ),
                 'ID': Number( ml.id )
             }
         })
     }
 
-    return data;
-}
-
-const allTasks = ( tasks ) => {
-    let data = [];
-    for ( const task of tasks ) {
-        data.push( task.id )
-    }
-    data = data.join( ' ' );
     return data;
 }

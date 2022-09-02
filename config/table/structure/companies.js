@@ -1,12 +1,9 @@
 import { FieldType } from "@airtable/blocks/models";
+import format from "../format";
 
-const companiesStructure = [
+const companiesStructure = () => [
     { name: 'Company Name', type: FieldType.SINGLE_LINE_TEXT },
-    { name: 'Projects', type: FieldType.MULTILINE_TEXT },
-    { name: 'People', type: FieldType.MULTILINE_TEXT },
-    { name: 'Milestones', type: FieldType.MULTILINE_TEXT },
-    { name: 'Time', type: FieldType.MULTILINE_TEXT },
-    { name: 'All Tasks', type: FieldType.MULTILINE_TEXT },
+    { name: 'ID', type: FieldType.NUMBER, options: format.number },
 ];
 
 export default companiesStructure;

@@ -1,5 +1,8 @@
-const teamworkHeaders = {
-    Authorization: 'Basic aGFtZGFuYXdhbHVkaW4xM0BnbWFpbC5jb206NDQyNjMybk4='
+import { globalConfig } from "@airtable/blocks"
+
+const teamworkHeaders = () => {
+    const combine = globalConfig.get( 'username' ) + ':' + globalConfig.get( 'password' );
+    return { Authorization: `Basic ${ btoa( combine ) }` }
 }
 
 export default {

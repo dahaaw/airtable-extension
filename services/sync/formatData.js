@@ -8,6 +8,7 @@ export default ( tableName, teamworkData ) => {
     if( tableName === 'Milestones' ) formatter = services.sync.formatDataMilestones;
     if( tableName === 'People' ) formatter = services.sync.formatDataPeople;
     if( tableName === 'Companies' ) formatter = services.sync.formatDataCompanies;
+    if( tableName === 'Task Lists' ) formatter = services.sync.formatDataTaskLists;
 
     return formatter( teamworkData );
 }

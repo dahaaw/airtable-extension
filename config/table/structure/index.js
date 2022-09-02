@@ -4,6 +4,7 @@ import time from './time';
 import milestones from './milestones';
 import people from './people';
 import companies from './companies';
+import tasklists from './taskLists';
 
 export default {
     projects,
@@ -11,5 +12,6 @@ export default {
     time,
     milestones,
     people,
-    companies
+    companies,
+    tasklists
 };

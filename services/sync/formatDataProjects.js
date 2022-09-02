@@ -4,12 +4,15 @@ export default ( projects ) => {
     const data = [];
 
     for (const project of projects) {
+        let companyId = services.airtable.record.getIDs( 'Companies', 'Company Name', project.company.name );
+        let ownerId = services.airtable.record.getIDs( 'People', 'ID', project.owner?.id ? Number( project.owner.id ) : null );
+
         data.push({
             fields: { 
                 project: project.name,
-                'company name': project.company.name,
+                'company name': companyId,
                 'project category': project.category.name ? { name: project.category.name } : null,
-                'project owner': project.category[ 'is-owner' ],
+                'project owner': ownerId,
                 'project update': null,
                 'project health': null,
                 description: project.description,
@@ -24,10 +27,7 @@ export default ( projects ) => {
                 'status': { name: project.subStatus },
                 'completed date': null,
                 'completed on time': null,
-                'Budget Status': null,
-                'Milestones': null,
-                'Time': null,
-                'All Tasks': null,
+                'Budget Status': null
             }
         })
     }
