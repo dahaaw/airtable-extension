@@ -10,7 +10,6 @@ export default ( logText ) => {
 
     exist.unshift( `${ withZero( hour ) }:${ withZero( minute ) } ${ logText }` );
 
-    console.log( {exist, length: exist.length} )
     if( exist.length > 30 ) exist = exist.slice( 0, 30 );
 
     globalConfig.setAsync( 'logs', exist );

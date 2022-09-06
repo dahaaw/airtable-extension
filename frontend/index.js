@@ -9,7 +9,7 @@ import {
     FormField,
     Input
 } from '@airtable/blocks/ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import services from '../services';
 
 globalConfig.setAsync( 'batchSize', 50 );
@@ -18,7 +18,7 @@ globalConfig.setAsync( 'connected', false );
 services.fetch.testConnection();
 
 const Logs = () => {
-    const [ logs, setLogs ] = useSynced( 'logs' );
+    const [ logs ] = useSynced( 'logs' );
     if( !logs ) globalConfig.setAsync( 'logs', [] );
     return(
         <div style={ {  marginTop: '10px' }}>
@@ -34,7 +34,7 @@ const Settings = ( { isSettingsOpen, setIsSettingsOpen } ) => {
     const [ username, setUsername ] = useSynced( 'username' );
     const [ password, setPassword ] = useSynced( 'password' );
     const [ batchSize, setBatchSize ] = useSynced( 'batchSize' );
-    const [ connected, setConnected ] = useSynced( 'connected' );
+    const [ connected ] = useSynced( 'connected' );
 
     return (
         <>
@@ -100,9 +100,13 @@ function TeamworkSync() {
     const [ isLoading ] = useSynced( 'isLoading' );
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [ connected ] = useSynced( 'connected' );
+    const lastSync = globalConfig.get( 'lastSync' );
 
     const base = useBase();
     services.watch.all( base );
+    useEffect(() => {
+      if( connected && lastSync) services.sync.full();
+    }, [])
     
     return (
         <>

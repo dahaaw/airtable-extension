@@ -1,5 +1,7 @@
+import jsToYYYYMMDD from "./jsToYYYYMMDD";
 import YYYYMMDDto from "./YYYYMMDDto";
 
 export default {
-    YYYYMMDDto
+    YYYYMMDDto,
+    jsToYYYYMMDD,
 }
