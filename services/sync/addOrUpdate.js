@@ -16,7 +16,8 @@ export default async ( table, teamworkData ) => {
             await table.updateRecordsAsync( dataToUpdate );
             console.log({ record, dataToUpdate })
 
-            records.watch( 'cellValues', services.watch.func() )
+            // recall watch function
+            records.watch( 'cellValues', () => null );
         } else {
             // add
             await services.sync.addRecords( table, [ td ] );

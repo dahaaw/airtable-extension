@@ -7,7 +7,8 @@ import {
     Dialog,
     Heading,
     FormField,
-    Input
+    Input,
+    Switch
 } from '@airtable/blocks/ui';
 import React, { useEffect, useState } from 'react';
 import services from '../services';
@@ -35,6 +36,7 @@ const Settings = ( { isSettingsOpen, setIsSettingsOpen } ) => {
     const [ password, setPassword ] = useSynced( 'password' );
     const [ batchSize, setBatchSize ] = useSynced( 'batchSize' );
     const [ connected ] = useSynced( 'connected' );
+    const [isEnabled, setIsEnabled] = useSynced( 'active' );
 
     return (
         <>
@@ -48,6 +50,14 @@ const Settings = ( { isSettingsOpen, setIsSettingsOpen } ) => {
                 </div>
                 <Heading>Settings</Heading>
                 <div style={ {  marginTop: '15px' }}>
+                    <Switch
+                        value={isEnabled}
+                        onChange={newValue => setIsEnabled(newValue)}
+                        label="Update changes to Teamwork"
+                        width="100%"
+                        marginBottom="15px"
+                        style={{ 'font-size': '13px', 'font-weight': '500' }}
+                    />
                     <FormField label="Teamwork url">
                         <Input 
                             value={ teamworkUrl } 
@@ -101,11 +111,11 @@ function TeamworkSync() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [ connected ] = useSynced( 'connected' );
     const lastSync = globalConfig.get( 'lastSync' );
-
+    
     const base = useBase();
     services.watch.all( base );
     useEffect(() => {
-      if( connected && lastSync) services.sync.full();
+      if( connected && lastSync ) services.sync.full();
     }, [])
     
     return (

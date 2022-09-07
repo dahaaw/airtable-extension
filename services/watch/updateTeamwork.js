@@ -6,12 +6,14 @@ export default async ( table, column, key, value, id ) => {
 
     if( table === 'Projects' ){
         if( column === 'project' ) await services.fetch.project.update( id, 'name', value );
+        if( column === 'description' ) await services.fetch.project.update( id, 'description', value );
         if( column === 'date' ) await services.fetch.project.update( id, 'startDate', valueDate( value ) );
         if( column === 'due date' ) await services.fetch.project.update( id, 'endDate', valueDate( value ) );
     }
 
     if( table === 'Milestones' ){
         if( column === 'Milestone' ) await services.fetch.milestones.update( id, 'title', value );
+        if( column === 'Description' ) await services.fetch.milestones.update( id, 'description', value );
         if( column === 'Due Date' ) await services.fetch.milestones.update( id, 'deadline', valueDate( value ) );
     }
 

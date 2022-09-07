@@ -6,7 +6,9 @@ export default () => {
     const updatingDetail = globalConfig.get( 'updatingDetail' );
 
     return async (model, key, details) => {
-
+        const active = globalConfig.get( 'active' );
+        if( !active ) return;
+        
         if( JSON.stringify( updatingDetail ) === JSON.stringify( details ) ) clearTimeout( updatingProcess );
 
         globalConfig.setAsync( 'updatingDetail', details );
