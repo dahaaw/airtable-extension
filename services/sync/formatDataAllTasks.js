@@ -26,7 +26,7 @@ export default ( tasks ) => {
                 'assigned to': assignedId,
                 'created by': creatorId,
                 'date created': task[ 'created-on' ],
-                'progress': task[ 'progress' ],
+                'progress': task[ 'progress' ] ? task[ 'progress' ] / 100 : null,
                 'priority': priorityNumber( task[ 'priority' ] ),
                 'private': task[ 'private' ],
                 'time estimate': task[ 'estimated-minutes' ],
@@ -36,7 +36,7 @@ export default ( tasks ) => {
                 'board column': task[ 'boardColumn' ]?.name,
                 'parent task id': task[ 'parentTaskId' ] ? Number( task[ 'parentTaskId' ] ) : null,
                 'priority text': task[ 'priority' ] ? { name: task[ 'priority' ][0].toUpperCase() + task[ 'priority' ].slice(1) } : null,
-                'completed date': task[ 'created-on' ],
+                'completed date': task[ 'completed_on' ],
                 'completed by': completerId,
             }
         })

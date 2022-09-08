@@ -24,7 +24,7 @@ export default ( milestones ) => {
                 'Tags': services.formatter.tags.fromTeamWork( ml.tags ),
                 'Active Tasks': ml.tasklists.length,
                 'Completed Tasks': null,
-                'Percent Complete': Number( ml.percentageComplete ),
+                'Percent Complete': ml.percentageComplete ? Number( ml.percentageComplete ) / 100 : null,
                 'ID': Number( ml.id )
             }
         })

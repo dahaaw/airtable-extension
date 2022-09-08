@@ -1,3 +1,4 @@
+import { base } from "@airtable/blocks";
 import services from "..";
 import getIDsFromRelated from "../airtable/record/getIDsFromRelated";
 
@@ -19,6 +20,8 @@ export default async ( table, column, key, value, id ) => {
 
     if( table === 'All Tasks' ){
         if( column === 'task name' ) await services.fetch.task.update( id, 'content', value );
+        if( column === 'task description' ) await services.fetch.task.update( id, 'description', value );
+        if( column === 'priority text' ) await services.fetch.task.update( id, 'priority', value.name?.toLowerCase() );
         if( column === 'start date' ) await services.fetch.task.update( id, 'start-date', valueDate( value ) );
         if( column === 'due date' ) await services.fetch.task.update( id, 'due-date', valueDate( value ) );
         if( column === 'time estimate' ) await services.fetch.task.update( id, 'estimated-minutes', value );
@@ -26,9 +29,28 @@ export default async ( table, column, key, value, id ) => {
             const IDs = await getIDsFromRelated( 'People', 'ID', value );
             await services.fetch.task.update( id, 'responsible-party-id', IDs )
         }
+        if( column === 'progress' ) await services.fetch.task.update( id, 'progress', value * 100 )
     }
 
     if( table === 'Time' ){
+        if( column === 'Hours' ){
+            const timeTabel = base.getTableByNameIfExists( table );
+            const minutes = await services.airtable.record.getValue( timeTabel, 'ID', id, 'Minutes' );
+            await services.fetch.time.update( id, 'minutes', ( value * 60 ) + minutes );
+        }
+        if( column === 'Minutes' ){
+            const timeTabel = base.getTableByNameIfExists( table );
+            const hours = await services.airtable.record.getValue( timeTabel, 'ID', id, 'Hours' );
+            await services.fetch.time.update( id, 'minutes', ( hours * 60 ) + value )
+        }
+        if( column === 'Date' ){
+            const gmt0 = services.formatter.date.localeToGMT( value );
+            const splited = gmt0?.split( 'T' );
+            const date = valueDate( splited[ 0 ] );
+            const time = splited[ 1 ]?.slice( 0, 5 );
+            await services.fetch.time.updateDateTime( id, date, time );
+        }
+        if( column === 'Description' ) await services.fetch.time.update( id, 'description', value );
         if( column === 'Is it Billable' ) await services.fetch.time.update( id, 'isbillable', value ? '1' : "0" );
     }
 }
