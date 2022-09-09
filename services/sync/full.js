@@ -26,7 +26,7 @@ export default async ( ) => {
 
     setTimeout(() => {
         services.sync.full()
-    }, 10000);
+    }, ( Number( globalConfig.get( 'autoSyncInterval' ) ) | 10 ) *  1000);
 }
 
 const fullCreate = async ( table ) => {

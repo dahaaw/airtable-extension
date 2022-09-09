@@ -37,6 +37,7 @@ const Settings = ( { isSettingsOpen, setIsSettingsOpen } ) => {
     const [ batchSize, setBatchSize ] = useSynced( 'batchSize' );
     const [ connected ] = useSynced( 'connected' );
     const [isEnabled, setIsEnabled] = useSynced( 'active' );
+    const [ autoSyncInterval ] = useSynced( 'autoSyncInterval' );
 
     return (
         <>
@@ -79,11 +80,18 @@ const Settings = ( { isSettingsOpen, setIsSettingsOpen } ) => {
                             type='password'
                         />
                     </FormField>
-                    <FormField label="Write date persecond">
+                    <FormField label="API Write Data / second">
                         <Input 
                             value={ batchSize } 
                             onChange={ e => setBatchSize(e.target.value) } 
                             type='text'
+                        />
+                    </FormField>
+                    <FormField label="Auto Sync Interval (in seconds)">
+                        <Input 
+                            value={ autoSyncInterval } 
+                            onChange={ e => globalConfig.setAsync( 'autoSyncInterval', e.target.value < 10 ? 10 : e.target.value ) } 
+                            type='number'
                         />
                     </FormField>
                 </div>
