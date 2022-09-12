@@ -123,7 +123,7 @@ function TeamworkSync() {
     const base = useBase();
     services.watch.all( base );
     useEffect(() => {
-      if( connected && lastSync ) services.sync.full();
+      if( connected && lastSync ) services.sync.full( true );
     }, [])
     
     return (
