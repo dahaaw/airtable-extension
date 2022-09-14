@@ -27,12 +27,12 @@ export default async ( auto = false ) => {
         await syncUpdate( table );
     }
     
-    services.logs.forDisplay( 'synced.' );
     if( !auto ) await globalConfig.setAsync( 'fullSyncLoading', false );
     const fullSyncLoading = globalConfig.get( 'fullSyncLoading' );
     if( !fullSyncLoading ) globalConfig.setAsync( 'isLoading', false );
     const lastSyncUTCString = new Date().toUTCString();
     globalConfig.setAsync( 'lastSync', lastSyncUTCString );
+    if( !fullSyncLoading ) services.logs.forDisplay( 'synced.' );
     
     if( !fullSyncLoading ) setTimeout(() => {
         services.sync.full( true )
