@@ -3,7 +3,7 @@ import services from "../..";
 import config from "../../../config";
 
 export default async ( lastSyncDate, page = 1, data = null ) => {
-    let url = `${ globalConfig.get( 'teamworkUrl' ) }/tasks.json?page=${ page }&pageSize=10&includeCompletedTasks=true&includeTasksWithoutDueDates=true&includeArchivedProjects=true&includeCompletedPredecessors=true`;
+    let url = `${ globalConfig.get( 'teamworkUrl' ) }/tasks.json?page=${ page }&includeCompletedTasks=true&includeTasksWithoutDueDates=true&includeArchivedProjects=true&includeCompletedPredecessors=true`;
     if( lastSyncDate ) url += `&updatedAfterDate=${ lastSyncDate }`;
     const response = await fetch( url, {
         headers: config.fetch.teamworkHeaders()
