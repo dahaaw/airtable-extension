@@ -9,6 +9,7 @@ import formatDataPeople from "./formatDataPeople";
 import formatDataCompanies from "./formatDataCompanies";
 import formatDataTaskLists from './formatDataTaskLists';
 import addOrUpdate from "./addOrUpdate";
+import formatDataTags from "./formatDataTags";
 
 export default {
     full,
@@ -22,4 +23,5 @@ export default {
     formatDataCompanies,
     formatDataTaskLists,
     addOrUpdate,
+    formatDataTags
 }

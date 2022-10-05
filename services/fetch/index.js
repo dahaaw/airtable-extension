@@ -6,6 +6,7 @@ import people from './people';
 import companies from "./companies";
 import testConnection from "./testConnection";
 import taskList from './taskList';
+import tags from "./tags";
 
 export default {
     project,
@@ -15,5 +16,6 @@ export default {
     people,
     companies,
     testConnection,
-    taskList
+    taskList,
+    tags
 }

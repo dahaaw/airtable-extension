@@ -6,6 +6,7 @@ export default async ( tableName ) => {
     let structure;
     if ( tableName === 'Companies' ) structure = await config.table.structure.companies();
     if ( tableName === 'People' ) structure = await config.table.structure.people();
+    if ( tableName === 'Tags' ) structure = await config.table.structure.tags();
     if ( tableName === 'Projects' ) structure = await config.table.structure.projects();
     if ( tableName === 'Milestones' ) structure = await config.table.structure.milestones();
     if ( tableName === 'Task Lists' ) structure = await config.table.structure.tasklists();

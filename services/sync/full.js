@@ -8,6 +8,7 @@ export default async ( auto = false ) => {
     let table = {};
     table.Companies = await services.airtable.table.selectAndCreateIfNotExist( 'Companies' );
     table.People = await services.airtable.table.selectAndCreateIfNotExist( 'People' );
+    table.Tags = await services.airtable.table.selectAndCreateIfNotExist( 'Tags' );
     table.Projects = await services.airtable.table.selectAndCreateIfNotExist( 'Projects' );
     table.Milestones = await services.airtable.table.selectAndCreateIfNotExist( 'Milestones' );
     table.TaskLists = await services.airtable.table.selectAndCreateIfNotExist( 'Task Lists' );
@@ -48,6 +49,10 @@ const fullCreate = async ( table ) => {
     const allPeople = await services.fetch.people.all();
     await services.sync.addRecords( table.People, allPeople[ 'people' ] );
 
+    // GET DATA TAGS AND ADD RECORD
+    const allTags = await services.fetch.tags.all();
+    await services.sync.addRecords( table.Tags, allTags.tags );
+
     // GET DATA PROJECTS AND ADD RECORD
     const allProjects = await services.fetch.project.all();
     await services.sync.addRecords( table.Projects, allProjects.projects );
@@ -77,6 +82,10 @@ const createOrUpdate = async ( table ) => {
     // GET DATA PEOPLE AND ADD RECORD
     const allPeople = await services.fetch.people.all();
     await services.sync.addOrUpdate( table.People, allPeople[ 'people' ] );
+
+    // GET DATA TAGS AND ADD RECORD
+    const allTags = await services.fetch.tags.all();
+    await services.sync.addOrUpdate( table.Tags, allTags.tags );
 
     // GET DATA PROJECTS AND ADD RECORD
     const allProjects = await services.fetch.project.all();
@@ -112,6 +121,10 @@ const syncUpdate = async ( table ) => {
     // GET DATA PEOPLE AND ADD RECORD
     const allPeople = await services.fetch.people.all( lastSyncDate );
     await services.sync.addOrUpdate( table.People, allPeople[ 'people' ] );
+
+    // GET DATA TAGS AND ADD RECORD
+    const allTags = await services.fetch.tags.all( lastSyncDate );
+    await services.sync.addOrUpdate( table.Tags, allTags.tags );
 
     // GET DATA PROJECTS AND ADD RECORD
     const allProjects = await services.fetch.project.all( lastSyncDate );
