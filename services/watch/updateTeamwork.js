@@ -10,6 +10,19 @@ export default async ( table, column, key, value, id ) => {
         if( column === 'description' ) await services.fetch.project.update( id, 'description', value );
         if( column === 'date' ) await services.fetch.project.update( id, 'startDate', valueDate( value ) );
         if( column === 'due date' ) await services.fetch.project.update( id, 'endDate', valueDate( value ) );
+        if( column === 'project category' ) {
+            const projectCategories = await services.fetch.project.categories();
+            let projectCategory = projectCategories.categories.find( f => f.name === value.name );
+            if ( projectCategory ) await services.fetch.project.update( id, 'category-id', projectCategory.id );
+        }
+        if( column === 'Tags.' ){
+            const IDs = getIDsFromRelated( 'Tags', 'ID', value )
+            await services.fetch.project.update( id, 'tagIds', IDs );
+        }
+        if( column === 'company name' && value ){
+            const ID = getIDsFromRelated( 'Companies', 'ID', [ value[ 0 ] ] );
+            await services.fetch.project.update( id, 'companyId', ID );
+        }
     }
 
     if( table === 'Milestones' ){

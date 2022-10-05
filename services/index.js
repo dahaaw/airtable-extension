@@ -4,6 +4,7 @@ import formatter from './formatter';
 import airtable from './airtable';
 import logs from './logs';
 import watch from './watch';
+import updates from './updates';
 
 export default {
     fetch,
@@ -11,5 +12,6 @@ export default {
     formatter,
     airtable,
     logs,
-    watch
+    watch,
+    updates
 }

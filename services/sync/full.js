@@ -5,6 +5,10 @@ export default async ( auto = false ) => {
     globalConfig.setAsync( 'isLoading', true );
     globalConfig.setAsync( 'autoSync', auto );
     if( !auto ) globalConfig.setAsync( 'fullSyncLoading', true );
+
+    // patch update
+    await services.updates();
+
     let table = {};
     table.Companies = await services.airtable.table.selectAndCreateIfNotExist( 'Companies' );
     table.People = await services.airtable.table.selectAndCreateIfNotExist( 'People' );

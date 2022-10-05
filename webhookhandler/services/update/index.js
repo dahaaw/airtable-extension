@@ -9,7 +9,14 @@ module.exports = async ( data ) => {
         const id = await getAirtableID( 'Projects', data.project.id );
         if( !id ) return;
 
+        const companyId = await getAirtableIDs( 'Companies', [ { id: data.project.companyId } ] );
+        data.project[ 'company name' ] = companyId;
+
+        const tags = await getAirtableIDs( 'Tags', data.project.tags );
+        data.project[ 'Tags.'] = tags;
+
         const records = services.formatter.project( id, data.project );
+        console.log(records.records)
         services.fetch.patch( 'Projects', records );
     }
 

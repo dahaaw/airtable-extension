@@ -12,6 +12,7 @@ const projectStructure = async () => {
 
     const Companies = base.getTableByNameIfExists( 'Companies' );
     const People = base.getTableByNameIfExists( 'People' );
+    const Tags = base.getTableByNameIfExists( 'Tags' );
 
     return [
         { name: 'project', type: FieldType.MULTILINE_TEXT },
@@ -45,7 +46,9 @@ const projectStructure = async () => {
         { name: 'due date', type: FieldType.DATE, options: format.date },
         { name: 'date created', type: FieldType.DATE_TIME, options: format.dateTime },
         { name: 'date updated', type: FieldType.DATE_TIME, options: format.dateTime },
-        { name: 'tags', type: FieldType.MULTILINE_TEXT },
+        { name: 'Tags.', type: FieldType.MULTIPLE_RECORD_LINKS, options: {
+            linkedTableId: Tags.id,
+        } },
         { name: 'ID', type: FieldType.NUMBER, options: format.number },
         { name: 'total project budget', type: FieldType.MULTILINE_TEXT },
         { name: '% project budget used', type: FieldType.PERCENT, options: format.percent },
