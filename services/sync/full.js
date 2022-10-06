@@ -6,9 +6,6 @@ export default async ( auto = false ) => {
     globalConfig.setAsync( 'autoSync', auto );
     if( !auto ) globalConfig.setAsync( 'fullSyncLoading', true );
 
-    // patch update
-    if( lastSync ) await services.updates();
-
     let table = {};
     table.Companies = await services.airtable.table.selectAndCreateIfNotExist( 'Companies' );
     table.People = await services.airtable.table.selectAndCreateIfNotExist( 'People' );
@@ -21,6 +18,9 @@ export default async ( auto = false ) => {
 
     const lastSync = globalConfig.get( 'lastSync' );
     const autoSync = globalConfig.get( 'autoSync' );
+
+    // patch update
+    if( lastSync ) await services.updates();
 
     if( !autoSync ){
         if( lastSync ) {

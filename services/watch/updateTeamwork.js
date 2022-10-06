@@ -69,6 +69,12 @@ export default async ( table, column, key, value, id ) => {
         }
         if( column === 'Description' ) await services.fetch.time.update( id, 'description', value );
         if( column === 'Is it Billable' ) await services.fetch.time.update( id, 'isbillable', value ? '1' : "0" );
+        if( column === 'Tags' ){
+            let tags = '';
+            if ( value ) for ( const v of value ) tags += ( v.name + ',' );
+            if( tags ) tags = tags.slice( 0, -1 );
+            await services.fetch.time.update( id, 'tags', tags );
+        }
     }
 }
 

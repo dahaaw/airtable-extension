@@ -10,6 +10,8 @@ export default ( times ) => {
         const taskId = services.airtable.record.getIDs( 'All Tasks', 'ID', time[ 'todo-item-id' ] );
         const parentTaskId = services.airtable.record.getIDs( 'All Tasks', 'ID', time[ 'parentTaskId' ] );
         const tasklistId = services.airtable.record.getIDs( 'Task Lists', 'ID', time.tasklistId );
+        let tagIDs = time.tags.map( v => v.id );
+        let taskTagIDs = time[ 'task-tags' ].map( v => v.id );
 
         data.push({
             fields: { 
@@ -33,11 +35,14 @@ export default ( times ) => {
                 'Estimated': Number( time.taskEstimatedTime ),
                 'Estimated Hours': parseInt( time.taskEstimatedTime / 60 ),
                 'Estimated Minutes': time.taskEstimatedTime % 60,
-                'Task Tags': services.formatter.tags.fromTeamWork( time[ 'task-tags' ] ),
+                'Task Tags.': services.formatter.tags.fromTeamWork( time[ 'task-tags' ] ),
                 'First Name': time[ 'person-first-name'],
                 'Last Name': time[ 'person-last-name'],
                 'User ID': Number( time[ 'person-id'] ),
                 'Task ID': Number( time[ 'todo-item-id' ] ),
+                'Tags': services.airtable.record.getIDs( 'Tags', 'ID', tagIDs ),
+                'Task Tags.': services.airtable.record.getIDs( 'Tags', 'ID', taskTagIDs ),
+                'Updated Date': time[ 'updated-date' ]
             }
         })
     }

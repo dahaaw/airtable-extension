@@ -16,7 +16,6 @@ module.exports = async ( data ) => {
         data.project[ 'Tags.'] = tags;
 
         const records = services.formatter.project( id, data.project );
-        console.log(records.records)
         services.fetch.patch( 'Projects', records );
     }
 
@@ -48,7 +47,7 @@ module.exports = async ( data ) => {
         const id = await getAirtableID( 'Time', data.time.id );
         if( !id ) return;
 
-        const records = services.formatter.time( id, data.time );
+        const records = await services.formatter.time( id, data.time );
         services.fetch.patch( 'Time', records );
     }
 

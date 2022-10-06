@@ -67,4 +67,42 @@ export default async () => {
         const taskLists = await services.fetch.taskList.all();
         await services.sync.addOrUpdate( TaskLists, taskLists[ 'tasklists' ] );
     }
+
+    // TIME UPDATE
+    const Time = base.getTableByNameIfExists( 'Time' );
+    let TimeUpdate = false;
+
+    let TimeTaskTags = Time.getFieldByNameIfExists( 'Task Tags.' );
+    if( !TimeTaskTags ){
+        services.logs.forDisplay( 'creating Time task tags.' )
+        await Time.createFieldAsync( 'Task Tags.', FieldType.MULTIPLE_RECORD_LINKS, {
+            linkedTableId: Tags.id,
+        } );
+        TimeUpdate = true;
+    }
+
+    let TimeUpdatedDate = Time.getFieldByNameIfExists( 'Updated Date' );
+    if( !TimeUpdatedDate ){
+        services.logs.forDisplay( 'creating Time updated date' )
+        await Time.createFieldAsync( 'Updated Date', FieldType.DATE_TIME, {
+            dateFormat: { name: 'iso' }, 
+            timeFormat: { name: '24hour' }, 
+            timeZone: 'client' 
+        } );
+        TimeUpdate = true;
+    }
+
+    let TimeTags = Time.getFieldByNameIfExists( 'Tags' );
+    if( !TimeTags ){
+        services.logs.forDisplay( 'creating Time tags' )
+        await Time.createFieldAsync( 'Tags', FieldType.MULTIPLE_RECORD_LINKS, {
+            linkedTableId: Tags.id,
+        } );
+        TimeUpdate = true;
+    }
+    
+    if( TimeUpdate ){
+        const timeAll = await services.fetch.time.all();
+        await services.sync.addOrUpdate( Time, timeAll[ 'time-entries' ] );
+    }
 }

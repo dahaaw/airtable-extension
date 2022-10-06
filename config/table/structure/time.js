@@ -15,6 +15,7 @@ const timeStructure = async () => {
     const People = base.getTableByNameIfExists( 'People' );
     const Task = base.getTableByNameIfExists( 'All Tasks' );
     const TaskLists = base.getTableByNameIfExists( 'Task Lists' );
+    const Tags = base.getTableByNameIfExists( 'Tags' ); 
 
     return [
         { name: 'ID', type: FieldType.NUMBER, options: format.number },
@@ -41,6 +42,9 @@ const timeStructure = async () => {
         { name: 'Parent Task', type: FieldType.MULTIPLE_RECORD_LINKS, options: {
             linkedTableId: Task.id,
         } },
+        { name: 'Task Tags.', type: FieldType.MULTIPLE_RECORD_LINKS, options: {
+            linkedTableId: Tags.id,
+        } },
         { name: 'Is Sub-task', type: FieldType.CHECKBOX, options: format.checkbox },
         { name: 'Is it Billable', type: FieldType.CHECKBOX, options: format.checkbox },
         { name: 'Hours', type: FieldType.NUMBER, options: format.number },
@@ -49,11 +53,14 @@ const timeStructure = async () => {
         { name: 'Estimated', type: FieldType.NUMBER, options: format.number },
         { name: 'Estimated Hours', type: FieldType.NUMBER, options: format.number },
         { name: 'Estimated Minutes', type: FieldType.NUMBER, options: format.number },
-        { name: 'Task Tags', type: FieldType.MULTILINE_TEXT },
         { name: 'First Name', type: FieldType.SINGLE_LINE_TEXT },
         { name: 'Last Name', type: FieldType.SINGLE_LINE_TEXT },
         { name: 'User ID', type: FieldType.NUMBER, options: format.number },
         { name: 'Task ID', type: FieldType.NUMBER, options: format.number },
+        { name: 'Updated Date', type: FieldType.DATE_TIME, options: format.dateTime },
+        { name: 'Tags', type: FieldType.MULTIPLE_RECORD_LINKS, options: {
+            linkedTableId: Tags.id,
+        } },
     ];
 }
 
