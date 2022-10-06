@@ -1,7 +1,7 @@
 const services = require( '../' );
 
 module.exports = async ( data ) => {
-    
+
     if( data.project && !data.task ) {
         /* If project only,
         ** prevent update task action get into this project action
@@ -50,6 +50,15 @@ module.exports = async ( data ) => {
 
         const records = services.formatter.time( id, data.time );
         services.fetch.patch( 'Time', records );
+    }
+
+    // because task update send data tasklist too
+    if( data.taskList && !data.task && !data.project ){
+        const id = await getAirtableID( 'Task Lists', data.taskList.id );
+        if( !id ) return;
+
+        records = await services.formatter.taskList( id, data.taskList );
+        services.fetch.patch( 'Task Lists', records );
     }
 
     // console.log( data )

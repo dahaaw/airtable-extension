@@ -31,6 +31,10 @@ export default async ( table, column, key, value, id ) => {
         if( column === 'Due Date' ) await services.fetch.milestones.update( id, 'deadline', valueDate( value ) );
     }
 
+    if( table === 'Task Lists' ){
+        if( column === 'Description' ) await services.fetch.taskList.update( id, 'description', value );
+    }
+
     if( table === 'All Tasks' ){
         if( column === 'task name' ) await services.fetch.task.update( id, 'content', value );
         if( column === 'task description' ) await services.fetch.task.update( id, 'description', value );

@@ -7,7 +7,7 @@ export default async ( auto = false ) => {
     if( !auto ) globalConfig.setAsync( 'fullSyncLoading', true );
 
     // patch update
-    await services.updates();
+    if( lastSync ) await services.updates();
 
     let table = {};
     table.Companies = await services.airtable.table.selectAndCreateIfNotExist( 'Companies' );
