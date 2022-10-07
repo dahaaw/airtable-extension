@@ -16,6 +16,7 @@ import services from '../services';
 globalConfig.setAsync( 'batchSize', 50 );
 globalConfig.setAsync( 'isLoading', false );
 globalConfig.setAsync( 'connected', false );
+// globalConfig.setAsync( 'lastSync', new Date().toDateString() );
 services.fetch.testConnection();
 
 const Logs = () => {

@@ -11,7 +11,7 @@ export default ( times ) => {
         const parentTaskId = services.airtable.record.getIDs( 'All Tasks', 'ID', time[ 'parentTaskId' ] );
         const tasklistId = services.airtable.record.getIDs( 'Task Lists', 'ID', time.tasklistId );
         let tagIDs = time.tags.map( v => v.id );
-        let taskTagIDs = time[ 'task-tags' ].map( v => v.id );
+        let taskTagIDs = time[ 'task-tags' ]?.map( v => v.id ) | [];
 
         data.push({
             fields: { 

@@ -8,10 +8,14 @@ export default async () => {
     if( !Tags ){
         Tags = await services.airtable.table.selectAndCreateIfNotExist( 'Tags' );
         const allTags = await services.fetch.tags.all();
+        console.log({allTags})
         await services.sync.addRecords( Tags, allTags.tags );
+    }
 
-        // create field tags on table Project
-        let Projects = base.getTableByNameIfExists( 'Projects' );
+    // PROJECTS UPDATE
+    let Projects = base.getTableByNameIfExists( 'Projects' );
+    let ProjectTags = Projects.getFieldByNameIfExists( 'Tags.' );
+    if( !ProjectTags ){
         services.logs.forDisplay( 'creating Project tags.' )
         await Projects.createFieldAsync( 'Tags.', FieldType.MULTIPLE_RECORD_LINKS, {
             linkedTableId: Tags.id,
@@ -20,7 +24,7 @@ export default async () => {
         const allProjects = await services.fetch.project.all();
         await services.sync.addOrUpdate( Projects, allProjects.projects );
     }
-
+    
     // TASKLISTS UPDATE
     let TaskLists = base.getTableByNameIfExists( 'Task Lists');
     let TaskListsUpdate = false;
@@ -104,5 +108,118 @@ export default async () => {
     if( TimeUpdate ){
         const timeAll = await services.fetch.time.all();
         await services.sync.addOrUpdate( Time, timeAll[ 'time-entries' ] );
+    }
+
+    // TASK UPDATES
+    const Tasks = base.getTableByNameIfExists( 'All Tasks' );
+    let TasksUpdate = false;
+
+    const TaskProjectID = Tasks.getFieldByNameIfExists( 'Project ID' );
+    if( !TaskProjectID ){
+        services.logs.forDisplay( 'creating All Task project id' );
+        await Tasks.createFieldAsync( 'Project ID', FieldType.NUMBER, { precision: 0 } );
+        TasksUpdate = true;
+    }
+
+    const TaskListID = Tasks.getFieldByNameIfExists( 'Task List ID' );
+    if( !TaskListID ){
+        services.logs.forDisplay( 'creating All Task list id' );
+        await Tasks.createFieldAsync( 'Task List ID', FieldType.NUMBER, { precision: 0 } );
+        TasksUpdate = true;
+    }
+
+    const TaskCompanyID = Tasks.getFieldByNameIfExists( 'Company ID' );
+    if( !TaskCompanyID ){
+        services.logs.forDisplay( 'creating All Task company id' );
+        await Tasks.createFieldAsync( 'Company ID', FieldType.NUMBER, { precision: 0 } );
+        TasksUpdate = true;
+    }
+
+    const TaskUpdaterFirst = Tasks.getFieldByNameIfExists( 'Updater Firstname' );
+    if( !TaskUpdaterFirst ){
+        services.logs.forDisplay( 'creating All Task updater firstname' );
+        await Tasks.createFieldAsync( 'Updater Firstname', FieldType.SINGLE_LINE_TEXT );
+        TasksUpdate = true;
+    }
+
+    const TaskUpdaterLast = Tasks.getFieldByNameIfExists( 'Updater Lastname' );
+    if( !TaskUpdaterLast ){
+        services.logs.forDisplay( 'creating All Task updater lastname' );
+        await Tasks.createFieldAsync( 'Updater Lastname', FieldType.SINGLE_LINE_TEXT );
+        TasksUpdate = true;
+    }
+
+    const TaskCompleted = Tasks.getFieldByNameIfExists( 'Completed' );
+    if( !TaskCompleted ){
+        services.logs.forDisplay( 'creating All Task completed' );
+        await Tasks.createFieldAsync( 'Completed', FieldType.CHECKBOX, { icon: 'check', color: 'greenBright' } );
+        TasksUpdate = true;
+    }
+    
+    const TaskLastChange = Tasks.getFieldByNameIfExists( 'Last Change' );
+    if( !TaskLastChange ){
+        services.logs.forDisplay( 'creating All Task last change' );
+        await Tasks.createFieldAsync( 'Last Change', FieldType.DATE_TIME, {
+            dateFormat: { name: 'iso' }, 
+            timeFormat: { name: '24hour' }, 
+            timeZone: 'client' 
+        } );
+        TasksUpdate = true;
+    }
+
+    const TaskPosition = Tasks.getFieldByNameIfExists( 'Position' );
+    if( !TaskPosition ){
+        services.logs.forDisplay( 'creating All Task position' );
+        await Tasks.createFieldAsync( 'Position', FieldType.NUMBER, { precision: 0 } );
+        TasksUpdate = true;
+    }
+
+    const TaskHasDependencies = Tasks.getFieldByNameIfExists( 'Has Dependencies' );
+    if( !TaskHasDependencies ){
+        services.logs.forDisplay( 'creating All Task has dependencies' );
+        await Tasks.createFieldAsync( 'Has Dependencies', FieldType.NUMBER, { precision: 0 } );
+        TasksUpdate = true;
+    }
+
+    const TaskHasPredecessors = Tasks.getFieldByNameIfExists( 'Has Predecessors' );
+    if( !TaskHasPredecessors ){
+        services.logs.forDisplay( 'creating All Task has predecessors' );
+        await Tasks.createFieldAsync( 'Has Predecessors', FieldType.NUMBER, { precision: 0 } );
+        TasksUpdate = true;
+    }
+
+    const TaskTags = Tasks.getFieldByNameIfExists( 'Tags.' );
+    if( !TaskTags ){
+        services.logs.forDisplay( 'creating All Task tags.' );
+        await Tasks.createFieldAsync( 'Tags.', FieldType.MULTIPLE_RECORD_LINKS, {
+            linkedTableId: Tags.id,
+        } );
+        TasksUpdate = true;
+    }
+
+    const TaskTimeIsLogged = Tasks.getFieldByNameIfExists( 'Time Is Logged' );
+    if( !TaskTimeIsLogged ){
+        services.logs.forDisplay( 'creating All Task time is logged' );
+        await Tasks.createFieldAsync( 'Time Is Logged', FieldType.SINGLE_LINE_TEXT );
+        TasksUpdate = true;
+    }
+
+    const TaskResponsibilityFirst = Tasks.getFieldByNameIfExists( 'Responsible Firstname' );
+    if( !TaskResponsibilityFirst ){
+        services.logs.forDisplay( 'creating All Task responsible firstname' );
+        await Tasks.createFieldAsync( 'Responsible Firstname', FieldType.SINGLE_LINE_TEXT );
+        TasksUpdate = true;
+    }
+
+    const TaskResponsibilityLast = Tasks.getFieldByNameIfExists( 'Responsible Lastname' );
+    if( !TaskResponsibilityLast ){
+        services.logs.forDisplay( 'creating All Task responsible lastname' );
+        await Tasks.createFieldAsync( 'Responsible Lastname', FieldType.SINGLE_LINE_TEXT );
+        TasksUpdate = true;
+    }
+
+    if( TasksUpdate ){
+        const allTasks = await services.fetch.task.all();
+        await services.sync.addOrUpdate( Tasks, allTasks[ 'todo-items' ] );
     }
 }

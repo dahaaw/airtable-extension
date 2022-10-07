@@ -8,7 +8,7 @@ export default ( projects ) => {
     for (const project of projects) {
         let companyId = services.airtable.record.getIDs( 'Companies', 'Company Name', project.company.name );
         let ownerId = services.airtable.record.getIDs( 'People', 'ID', project.owner?.id ? Number( project.owner.id ) : null );
-        let tagIDs = project.tags.map( v => v.id );
+        let tagIDs = project.tags?.map( v => v.id ) | [];
         data.push({
             fields: { 
                 project: project.name,

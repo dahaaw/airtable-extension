@@ -9,6 +9,7 @@ export default ( tasks ) => {
         const creatorId = services.airtable.record.getIDs( 'People', 'ID', task[ 'creator-id' ] );
         const completerId = services.airtable.record.getIDs( 'People', 'ID', task[ 'completer_id' ] );
         const taskListId = services.airtable.record.getIDs( 'Task Lists', 'ID', task[ 'todo-list-id' ] );
+        let tagIDs = task.tags?.map( v => v.id ) | [];
 
         data.push({
             fields: {
@@ -32,12 +33,25 @@ export default ( tasks ) => {
                 'time estimate': task[ 'estimated-minutes' ],
                 'billable minutes': null,
                 'non billable minutes': null,
-                'tags': task.tags ? services.formatter.tags.fromTeamWork( task.tags ) : null,
                 'board column': task[ 'boardColumn' ]?.name,
                 'parent task id': task[ 'parentTaskId' ] ? Number( task[ 'parentTaskId' ] ) : null,
                 'priority text': task[ 'priority' ] ? { name: task[ 'priority' ][0].toUpperCase() + task[ 'priority' ].slice(1) } : null,
                 'completed date': task[ 'completed_on' ],
                 'completed by': completerId,
+                'Project ID': task[ 'project-id' ],
+                'Task List ID': task[ 'todo-list-id' ],
+                'Company ID': task[ 'company-id' ],
+                'Updater Firstname': task[ 'updater-firstname' ],
+                'Updater Lastname': task[ 'updater-lastname' ],
+                'Completed': task.completed,
+                'Last Change': task[ 'last-changed-on' ],
+                'Position': task[ 'position' ],
+                'Has Dependencies': task[ 'has-dependencies'],
+                'Has Predecessors': task[ 'has-predecessors'],
+                'Tags.': services.airtable.record.getIDs( 'Tags', 'ID', tagIDs ),
+                'Time Is Logged': task.timeIsLogged,
+                'Responsible Firstname': task[ 'responsible-party-firstname' ],
+                'Responsible Lastname': task[ 'responsible-party-lastname' ],
             }
         })
     }
