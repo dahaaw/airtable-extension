@@ -9,7 +9,10 @@ export default ( tasks ) => {
         const creatorId = services.airtable.record.getIDs( 'People', 'ID', task[ 'creator-id' ] );
         const completerId = services.airtable.record.getIDs( 'People', 'ID', task[ 'completer_id' ] );
         const taskListId = services.airtable.record.getIDs( 'Task Lists', 'ID', task[ 'todo-list-id' ] );
-        let tagIDs = task.tags?.map( v => v.id ) | [];
+        let tagIDs = [];
+        if( task.tags?.length ) for (const tg of task.tags ) {
+            tagIDs.push( tg.id );
+        }
 
         data.push({
             fields: {
@@ -55,7 +58,7 @@ export default ( tasks ) => {
             }
         })
     }
-    
+    console.log({aaaaaabbbbb:data[0].fields["Tags."]})
     return data;
 }
 

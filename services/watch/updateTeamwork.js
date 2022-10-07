@@ -46,7 +46,31 @@ export default async ( table, column, key, value, id ) => {
             const IDs = await getIDsFromRelated( 'People', 'ID', value );
             await services.fetch.task.update( id, 'responsible-party-id', IDs )
         }
-        if( column === 'progress' ) await services.fetch.task.update( id, 'progress', value * 100 )
+        if( column === 'progress' ) await services.fetch.task.update( id, 'progress', value * 100 );
+        if( column === 'project' && value ){
+            const ID = getIDsFromRelated( 'Projects', 'ID', [ value[ 0 ] ] );
+            await services.fetch.task.updateProject( id, 'project', ID );
+        }
+        if( column === 'task list' && value ){
+            const ID = getIDsFromRelated( 'Task Lists', 'ID', [ value[ 0 ] ] );
+            await services.fetch.task.update( id, 'tasklistId', ID );
+        }
+        if( column === 'Completed' ){
+            let completed = false;
+            if( value ) completed = true;
+            await services.fetch.task.update( id, 'completed', completed );
+        }
+        if( column === 'parent task id'){
+            const taskTable = base.getTableByNameIfExists( table );
+            const taskName = await services.airtable.record.getValue( taskTable, 'ID', value, 'task name' );
+            if( taskName || value === null ){
+                await services.fetch.task.update( id, 'parentTaskId', value | "" );
+            }
+        }
+        if( column === 'Tags.'){
+            const IDs = getIDsFromRelated( 'Tags', 'ID', value )
+            await services.fetch.task.update( id, 'tagIds', IDs );
+        }
     }
 
     if( table === 'Time' ){

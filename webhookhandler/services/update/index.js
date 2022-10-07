@@ -1,7 +1,7 @@
 const services = require( '../' );
 
 module.exports = async ( data ) => {
-
+    console.log( data )
     if( data.project && !data.task ) {
         /* If project only,
         ** prevent update task action get into this project action
@@ -31,13 +31,15 @@ module.exports = async ( data ) => {
         const id = await getAirtableID( 'All Tasks', data.task.id );
         if( !id ) return;
 
-        const records = services.formatter.task( id, data.task );
+        const records = await services.formatter.task( id, data.task, data.project );
 
         // USER ASSIGNMENT ON TASK
         if( data.users ){
             const userIds = await getAirtableIDs( 'People', data.users );
 
             records.records[0].fields[ 'assigned to' ] = userIds;
+            records.records[0].fields[ 'Responsible Firstname' ] = data.users?.[ 0 ]?.firstName;
+            records.records[0].fields[ 'Responsible Lastname' ] = data.users?.[ 0 ]?.lastName;
         }
 
         services.fetch.patch( 'All Tasks', records );

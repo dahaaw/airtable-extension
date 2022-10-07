@@ -8,7 +8,6 @@ export default async () => {
     if( !Tags ){
         Tags = await services.airtable.table.selectAndCreateIfNotExist( 'Tags' );
         const allTags = await services.fetch.tags.all();
-        console.log({allTags})
         await services.sync.addRecords( Tags, allTags.tags );
     }
 
